@@ -1,5 +1,6 @@
-public class Bird {
-     void fly(){
-         System.out.println("Flap!"); 
-        } 
+public class Bird implements IFlyable {
+    @Override
+    public void fly() {
+        System.out.println("Flap!");
     }
+}

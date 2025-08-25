@@ -1,5 +1,7 @@
 public class Demo10 {
     public static void main(String[] args) {
-        new ReportService().generate();
+        ILogger logger = new ConsoleLogger();
+        ReportService service = new ReportService(logger);
+        service.generate();
     }
 }

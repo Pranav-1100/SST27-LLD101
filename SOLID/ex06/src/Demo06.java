@@ -1,6 +1,11 @@
 public class Demo06 {
     public static void main(String[] args) {
-        new Aviary().release(new Bird());
-        new Aviary().release(new Penguin()); // runtime error
+        Aviary aviary = new Aviary();
+        
+        Bird bird = new Bird();
+        aviary.release(bird);
+        
+        Penguin penguin = new Penguin();
+        aviary.releaseToWater(penguin);
     }
 }
