@@ -1,21 +1,36 @@
 package com.example.config;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
 /**
- * FAULTY "Singleton": public constructor, getInstance() returns a NEW instance each time,
- * not thread-safe, reload allowed anytime, mutable global state, reflection+serialization-friendly.
+ * Proper Thread-Safe Singleton using Holder Idiom
+ * Protected against reflection and serialization attacks
  */
 public class AppSettings implements Serializable {
     private final Properties props = new Properties();
+    private static boolean instanceCreated = false;
 
-    public AppSettings() { } // should not be public for true singleton
+    private AppSettings() {
+        synchronized (AppSettings.class) {
+            if (instanceCreated) {
+                throw new IllegalStateException("Singleton instance already exists!");
+            }
+            instanceCreated = true;
+        }
+    }
+
+    private static class Holder {
+        private static final AppSettings INSTANCE = new AppSettings();
+    }
 
     public static AppSettings getInstance() {
-        return new AppSettings(); // returns a fresh instance (bug)
+        return Holder.INSTANCE;
+    }
+
+    private Object readResolve() {
+        return getInstance();
     }
 
     public void loadFromFile(Path file) {
